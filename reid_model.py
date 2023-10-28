@@ -78,11 +78,18 @@ class PersonReidModel():
 
     
     @staticmethod
-    def calc_cosine_similarity(tensor1, tensor2):
+    def cosine_similarity(tensor1, tensor2):
         tensor1 = tensor1.detach().cpu().numpy()
         tensor2 = tensor2.detach().cpu().numpy()
 
         return cosine_similarity(tensor1, tensor2)
+
+    @staticmethod
+    def euclidean_distance(tensor1, tensor2): # use for L2 norm
+        diff = tensor1 - tensor2
+        distance = torch.sqrt(torch.sum(diff ** 2))
+        return distance
+
 
     @staticmethod
     def read_image(img_path):
@@ -99,3 +106,7 @@ class PersonReidModel():
                 print("IOError incurred when reading '{}'. Will redo. Don't worry. Just chill.".format(img_path))
                 pass
         return img
+
+    @staticmethod
+    def L2_norm(tensor):
+        return torch.nn.functional.normalize(tensor, dim=1, p=2)
